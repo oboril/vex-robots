@@ -6,15 +6,15 @@ import math
 
 random.seed(0)
 
-#region config
+# INITALIZE COMPONENTS
 motor_right = vex.Motor(6, True)
 motor_left = vex.Motor(9, False)
 
 motor_arm = vex.Motor(2, True)
 motor_pincher = vex.Motor(7, False)
 distance_sens = vex.Distance(0)
-#endregion config
 
+# USEFUL FUNCTIONS
 def go(speed_left, speed_right):
     motor_right.set_velocity(speed_right*100, PERCENT)
     motor_left.set_velocity(speed_left*100, PERCENT)
@@ -28,6 +28,7 @@ def stop():
 def time_now():
     return float(time())
 
+# MOVING AVERAGE
 class MovingVar:
     def __init__(self, name, init_val, gamma):
         self.name = name
@@ -41,6 +42,7 @@ class MovingVar:
     def print(self):
         print(self.name, round(self.val, 2))
 
+# initialize moving averages
 distance = MovingVar("distance", 2, 50.)
 speed = MovingVar("speed", 0, 50.)
 acceleration = MovingVar("acceleration", 0, 50.)
@@ -57,6 +59,8 @@ def update_variables():
     speed.update((old_dist-distance.val)/elapsed, elapsed)
     acceleration.update((old_speed-speed.val)/elapsed, elapsed)
 
+# MAIN PROGRAM STARTS HERE
+
 turn_dir = (0,0)
 button_pressed = 0
 is_on = False
@@ -65,8 +69,9 @@ turning = False
 SPEED = -0.5
 
 while True:
-    sleep(elapsed)
+    sleep(elapsed) # I didn't figure out how to get accurate time reading, so I'm sleeping instead
 
+    # left button toggles the automatic movement - press to start or to stop
     if brain.buttonLeft.pressing():
         if button_pressed < 0:
             is_on = not is_on
@@ -78,6 +83,7 @@ while True:
         stop()
         continue
 
+    # obstacle detection
     if distance.val < 1.5:
 
         forward_speed = (max(distance.val,0.5)-0.5)/1.
@@ -98,26 +104,3 @@ while True:
     motor_l.print()
 
     update_variables()
-
-    
-
-
-
-
-
-
-motor_arm.spin_for(FORWARD, 90, DEGREES)
-
-motor_pincher.spin(FORWARD)
-sleep(0.5)
-motor_pincher.set_stopping(HOLD)
-motor_pincher.stop()
-
-# main thread
-motor_right.spin(FORWARD)
-motor_left.spin(FORWARD)
-
-sleep(1)
-
-motor_left.stop()
-motor_right.stop()

@@ -1,3 +1,7 @@
+# When uploaded to the robot, this program allows to control the robot using the joystick controller
+# Right joystick - movement
+# Left joystick - pincher and arm movement
+
 #VEX IQ Python-Project
 import vex
 from time import sleep, time
@@ -6,16 +10,17 @@ import math
 
 random.seed(0)
 
-#region config
-motor_right = vex.Motor(6, True)
+# INITALIZING COMPONENTS
+motor_right = vex.Motor(6, True) # motor connected to  port 6 (0-indexed), reverse direction = True
 motor_left = vex.Motor(9, False)
 
 motor_arm = vex.Motor(2, True)
 motor_pincher = vex.Motor(7, False)
-distance_sens = vex.Distance(0)
-controller = vex.Controller()
-#endregion config
+distance_sens = vex.Distance(0) # distance sensor connected to port 0
+controller = vex.Controller() # use the controller
 
+
+# USEFUL FUNCTIONS AND CONSTANTS
 def go(speed_left, speed_right):
     motor_right.set_velocity(speed_right*100, PERCENT)
     motor_left.set_velocity(speed_left*100, PERCENT)
@@ -40,6 +45,8 @@ def read_controller():
     cC = (1 if cC > 0 else -1) * abs(cC)**1.5
     cD = (1 if cD > 0 else -1) * abs(cD)**1.5
     return [cA, cB, cC, cD]
+
+# PROGRAM STARTS HERE
 
 motor_arm.set_stopping(HOLD)
 motor_pincher.set_stopping(HOLD)
