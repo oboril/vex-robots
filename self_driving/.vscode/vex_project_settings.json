@@ -1,0 +1,18 @@
+{
+	"extension": {
+		"version": "0.4.1",
+		"json": 1
+	},
+	"project": {
+		"name": "test",
+		"description": "",
+		"creationDate": "4/29/2023, 11:48:13 PM",
+		"platform": "IQ2",
+		"language": "python",
+		"slot": 1,
+		"sdkVersion": "IQ2_1_0_0_17",
+		"python": {
+			"main": "src/main.py"
+		}
+	}
+}
